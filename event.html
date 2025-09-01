@@ -1,0 +1,371 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Event Photo Gallery</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #2563EB;
+            --secondary: #22D3EE;
+            --background: #F9FAFB;
+            --section-bg: #FFFFFF;
+            --text: #1E293B;
+            --hover: #4338CA;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Poppins', sans-serif;
+        }
+        
+        body {
+            background-color: var(--background);
+            color: var(--text);
+            padding: 20px;
+        }
+        
+        .gallery-container {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+        
+        .gallery-header {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+        
+        .gallery-title {
+            font-size: 2.75rem;
+            font-weight: 700;
+            margin-bottom: 15px;
+            position: relative;
+            display: inline-block;
+        }
+        
+        .gallery-title:after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 80px;
+            height: 4px;
+            background: linear-gradient(90deg, var(--primary), var(--secondary));
+            border-radius: 2px;
+        }
+        
+        .gallery-description {
+            max-width: 700px;
+            margin: 0 auto;
+            color: #64748B;
+            line-height: 1.6;
+        }
+        
+        .category-tabs {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-bottom: 30px;
+        }
+        
+        .category-tab {
+            padding: 10px 25px;
+            border-radius: 25px;
+            background-color: var(--section-bg);
+            color: var(--text);
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: none;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        
+        .category-tab.active, .category-tab:hover {
+            background-color: var(--primary);
+            color: white;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(37, 99, 235, 0.2);
+        }
+        
+        .photo-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+        
+        .photo-card {
+            background-color: var(--section-bg);
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+            transition: all 0.3s ease;
+            height: 250px;
+        }
+        
+        .photo-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.15);
+        }
+        
+        .photo-img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.5s ease;
+        }
+        
+        .photo-card:hover .photo-img {
+            transform: scale(1.05);
+        }
+        
+        .pagination {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            margin-top: 30px;
+        }
+        
+        .page-btn {
+            width: 40px;
+            height: 40px;
+            border-radius: 8px;
+            background-color: var(--section-bg);
+            color: var(--text);
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: none;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        
+        .page-btn.active, .page-btn:hover {
+            background-color: var(--primary);
+            color: white;
+        }
+        
+        .category-section {
+            display: none;
+        }
+        
+        .category-section.active {
+            display: block;
+        }
+        
+        @media (max-width: 768px) {
+            .gallery-title {
+                font-size: 2rem;
+            }
+            
+            .photo-grid {
+                grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+                gap: 15px;
+            }
+            
+            .photo-card {
+                height: 150px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="gallery-container">
+        <div class="gallery-header">
+            <h1 class="gallery-title">Event Photo Gallery</h1>
+            <p class="gallery-description">Relive the memorable moments from our recent events through these amazing photographs</p>
+        </div>
+        
+        <div class="category-tabs">
+            <button class="category-tab active" data-category="hackathon">Hackathon</button>
+            <button class="category-tab" data-category="worldskills">World Skills</button>
+            <button class="category-tab" data-category="gajajyoti">Gajajyoti</button>
+            <button class="category-tab" data-category="sports">Sports</button>
+            <button class="category-tab" data-category="achievements">Achievements</button>
+        </div>
+        
+        <!-- Hackathon Category -->
+        <div class="category-section active" id="hackathon">
+            <div class="photo-grid" id="hackathon-grid">
+                <!-- Photos will be loaded here by JavaScript -->
+            </div>
+            <div class="pagination" id="hackathon-pagination">
+                <!-- Pagination will be loaded here by JavaScript -->
+            </div>
+        </div>
+        
+        <!-- World Skills Category -->
+        <div class="category-section" id="worldskills">
+            <div class="photo-grid" id="worldskills-grid">
+                <!-- Photos will be loaded here by JavaScript -->
+            </div>
+            <div class="pagination" id="worldskills-pagination">
+                <!-- Pagination will be loaded here by JavaScript -->
+            </div>
+        </div>
+        
+        <!-- Gajajyoti Category -->
+        <div class="category-section" id="gajajyoti">
+            <div class="photo-grid" id="gajajyoti-grid">
+                <!-- Photos will be loaded here by JavaScript -->
+            </div>
+            <div class="pagination" id="gajajyoti-pagination">
+                <!-- Pagination will be loaded here by JavaScript -->
+            </div>
+        </div>
+        
+        <!-- Sports Category -->
+        <div class="category-section" id="sports">
+            <div class="photo-grid" id="sports-grid">
+                <!-- Photos will be loaded here by JavaScript -->
+            </div>
+            <div class="pagination" id="sports-pagination">
+                <!-- Pagination will be loaded here by JavaScript -->
+            </div>
+        </div>
+        
+        <!-- Achievements Category -->
+        <div class="category-section" id="achievements">
+            <div class="photo-grid" id="achievements-grid">
+                <!-- Photos will be loaded here by JavaScript -->
+            </div>
+            <div class="pagination" id="achievements-pagination">
+                <!-- Pagination will be loaded here by JavaScript -->
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Sample photo data for each category (30 photos per category)
+        const photoData = {
+            hackathon: Array(30).fill().map((_, i) => ({
+                id: `hack-${i+1}`,
+                src: `https://source.unsplash.com/random/600x400/?hackathon,technology,${i}`,
+                alt: `Hackathon Photo ${i+1}`
+            })),
+            worldskills: Array(30).fill().map((_, i) => ({
+                id: `skill-${i+1}`,
+                src: `https://source.unsplash.com/random/600x400/?workshop,skills,${i}`,
+                alt: `World Skills Photo ${i+1}`
+            })),
+            gajajyoti: Array(30).fill().map((_, i) => ({
+                id: `gaja-${i+1}`,
+                src: `https://source.unsplash.com/random/600x400/?culture,performance,${i}`,
+                alt: `Gajajyoti Photo ${i+1}`
+            })),
+            sports: Array(30).fill().map((_, i) => ({
+                id: `sport-${i+1}`,
+                src: `https://source.unsplash.com/random/600x400/?sports,athletics,${i}`,
+                alt: `Sports Photo ${i+1}`
+            })),
+            achievements: Array(30).fill().map((_, i) => ({
+                id: `achieve-${i+1}`,
+                src: `https://source.unsplash.com/random/600x400/?award,achievement,${i}`,
+                alt: `Achievements Photo ${i+1}`
+            }))
+        };
+
+        // Configuration
+        const photosPerPage = 8;
+        let currentPages = {
+            hackathon: 1,
+            worldskills: 1,
+            gajajyoti: 1,
+            sports: 1,
+            achievements: 1
+        };
+
+        // Initialize the gallery
+        document.addEventListener('DOMContentLoaded', function() {
+            // Load all categories
+            Object.keys(photoData).forEach(category => {
+                loadCategory(category, 1);
+            });
+            
+            // Set up category tab switching
+            const tabs = document.querySelectorAll('.category-tab');
+            tabs.forEach(tab => {
+                tab.addEventListener('click', function() {
+                    // Update active tab
+                    tabs.forEach(t => t.classList.remove('active'));
+                    this.classList.add('active');
+                    
+                    // Show selected category
+                    const category = this.dataset.category;
+                    document.querySelectorAll('.category-section').forEach(section => {
+                        section.classList.remove('active');
+                    });
+                    document.getElementById(category).classList.add('active');
+                });
+            });
+        });
+        
+        // Load photos for a specific category and page
+        function loadCategory(category, page) {
+            const grid = document.getElementById(`${category}-grid`);
+            const pagination = document.getElementById(`${category}-pagination`);
+            const photos = photoData[category];
+            const totalPages = Math.ceil(photos.length / photosPerPage);
+            
+            // Update current page
+            currentPages[category] = page;
+            
+            // Clear existing content
+            grid.innerHTML = '';
+            pagination.innerHTML = '';
+            
+            // Calculate photos to show
+            const startIndex = (page - 1) * photosPerPage;
+            const endIndex = Math.min(startIndex + photosPerPage, photos.length);
+            const photosToShow = photos.slice(startIndex, endIndex);
+            
+            // Add photos to grid
+            photosToShow.forEach(photo => {
+                const card = document.createElement('div');
+                card.className = 'photo-card';
+                card.innerHTML = `
+                    <img src="${photo.src}" alt="${photo.alt}" class="photo-img">
+                `;
+                grid.appendChild(card);
+            });
+            
+            // Create pagination
+            if (totalPages > 1) {
+                // Previous button
+                if (page > 1) {
+                    const prevBtn = document.createElement('button');
+                    prevBtn.className = 'page-btn';
+                    prevBtn.innerHTML = '&lt;';
+                    prevBtn.addEventListener('click', () => loadCategory(category, page - 1));
+                    pagination.appendChild(prevBtn);
+                }
+                
+                // Page numbers
+                for (let i = 1; i <= totalPages; i++) {
+                    const pageBtn = document.createElement('button');
+                    pageBtn.className = `page-btn ${i === page ? 'active' : ''}`;
+                    pageBtn.textContent = i;
+                    pageBtn.addEventListener('click', () => loadCategory(category, i));
+                    pagination.appendChild(pageBtn);
+                }
+                
+                // Next button
+                if (page < totalPages) {
+                    const nextBtn = document.createElement('button');
+                    nextBtn.className = 'page-btn';
+                    nextBtn.innerHTML = '&gt;';
+                    nextBtn.addEventListener('click', () => loadCategory(category, page + 1));
+                    pagination.appendChild(nextBtn);
+                }
+            }
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,1021 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>University Laboratories</title>
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <!-- AOS CSS -->
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #2563EB;
+            --secondary: #22D3EE;
+            --background: #F9FAFB;
+            --section-bg: #FFFFFF;
+            --text: #1E293B;
+            --button-hover: #4338CA;
+            --card-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            --lab-bio: #64748B;
+        }
+
+        [data-theme="dark"] {
+            --primary: #3B82F6;
+            --secondary: #22D3EE;
+            --background: #1E293B;
+            --section-bg: #334155;
+            --text: #F8FAFC;
+            --button-hover: #60A5FA;
+            --card-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+            --lab-bio: #94A3B8;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Poppins', sans-serif;
+            transition: background-color 0.3s ease, color 0.3s ease;
+        }
+
+        body {
+            background-color: var(--background);
+            color: var(--text);
+            min-height: 100vh;
+            padding: 40px 20px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        h1 {
+            text-align: center;
+            margin-bottom: 40px;
+            font-size: 2.5rem;
+            color: var(--primary);
+        }
+
+        .labs-intro {
+            text-align: center;
+            max-width: 800px;
+            margin: 0 auto 50px;
+            font-size: 1.1rem;
+            line-height: 1.6;
+            opacity: 0.9;
+        }
+
+        .labs-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 30px;
+        }
+
+        .lab-card {
+            background: var(--section-bg);
+            border-radius: 16px;
+            padding: 25px;
+            box-shadow: var(--card-shadow);
+            transition: all 0.3s ease;
+            color: var(--text);
+            border: 1px solid rgba(0, 0, 0, 0.1);
+            display: flex;
+            flex-direction: column;
+        }
+
+        .lab-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 25px rgba(0, 0, 0, 0.15);
+        }
+
+        .lab-img-container {
+            height: 180px;
+            overflow: hidden;
+            border-radius: 12px;
+            margin-bottom: 20px;
+            position: relative;
+        }
+
+        .lab-img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.5s ease;
+        }
+
+        .lab-card:hover .lab-img {
+            transform: scale(1.05);
+        }
+
+        .lab-icon {
+            position: absolute;
+            top: 15px;
+            left: 15px;
+            width: 50px;
+            height: 50px;
+            border-radius: 12px;
+            background: var(--primary);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 1.3rem;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+
+        .lab-name {
+            font-size: 1.3rem;
+            font-weight: 600;
+            margin-bottom: 10px;
+            color: var(--primary);
+        }
+
+        .lab-location {
+            font-size: 0.9rem;
+            opacity: 0.9;
+            margin-bottom: 15px;
+            font-weight: 400;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .lab-location i {
+            color: var(--secondary);
+        }
+
+        .lab-bio {
+            font-size: 0.95rem;
+            line-height: 1.5;
+            margin-bottom: 20px;
+            color: var(--lab-bio);
+            flex-grow: 1;
+        }
+
+        .lab-equipment {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-bottom: 20px;
+        }
+
+        .equipment-tag {
+            background: rgba(34, 211, 238, 0.1);
+            color: var(--secondary);
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            border: 1px solid rgba(34, 211, 238, 0.3);
+        }
+
+        .lab-link {
+            display: inline-block;
+            background: var(--primary);
+            color: white;
+            padding: 10px 20px;
+            border-radius: 30px;
+            text-decoration: none;
+            text-align: center;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            margin-top: auto;
+        }
+
+        .lab-link:hover {
+            background: var(--button-hover);
+            transform: translateY(-2px);
+        }
+
+        /* Modal Styles */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.8);
+            z-index: 2000;
+            overflow-y: auto;
+            padding: 40px 20px;
+        }
+
+        .modal-content {
+            background: var(--section-bg);
+            max-width: 900px;
+            margin: 0 auto;
+            border-radius: 16px;
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+            animation: modalFadeIn 0.4s ease;
+        }
+
+        @keyframes modalFadeIn {
+            from { opacity: 0; transform: translateY(50px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .modal-header {
+            height: 300px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .modal-header-img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .modal-icon {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            width: 60px;
+            height: 60px;
+            border-radius: 12px;
+            background: var(--primary);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 1.5rem;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+        }
+
+        .modal-close {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: rgba(0, 0, 0, 0.5);
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            font-size: 1.2rem;
+            border: none;
+        }
+
+        .modal-body {
+            padding: 30px;
+        }
+
+        .modal-title {
+            font-size: 1.8rem;
+            color: var(--primary);
+            margin-bottom: 10px;
+        }
+
+        .modal-subtitle {
+            font-size: 1.1rem;
+            color: var(--secondary);
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .modal-description {
+            margin-bottom: 25px;
+            line-height: 1.7;
+        }
+
+        .modal-section {
+            margin-bottom: 25px;
+        }
+
+        .modal-section-title {
+            font-size: 1.2rem;
+            color: var(--primary);
+            margin-bottom: 15px;
+            padding-bottom: 8px;
+            border-bottom: 2px solid var(--secondary);
+        }
+
+        .modal-features {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+        .feature-item {
+            background: rgba(34, 211, 238, 0.1);
+            padding: 15px;
+            border-radius: 10px;
+            border-left: 3px solid var(--secondary);
+        }
+
+        .feature-title {
+            font-weight: 600;
+            margin-bottom: 5px;
+            color: var(--primary);
+        }
+
+        .feature-desc {
+            font-size: 0.9rem;
+            opacity: 0.9;
+        }
+
+        .modal-gallery {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+        .gallery-item {
+            height: 150px;
+            border-radius: 8px;
+            overflow: hidden;
+            cursor: pointer;
+            transition: transform 0.3s ease;
+        }
+
+        .gallery-item:hover {
+            transform: scale(1.03);
+        }
+
+        .gallery-img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .modal-contact {
+            background: rgba(37, 99, 235, 0.1);
+            padding: 20px;
+            border-radius: 10px;
+            margin-top: 30px;
+        }
+
+        .theme-toggle {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: var(--primary);
+            color: white;
+            border: none;
+            padding: 10px 15px;
+            border-radius: 30px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            z-index: 1000;
+        }
+
+        .theme-toggle:hover {
+            background: var(--button-hover);
+        }
+
+        .theme-toggle i {
+            font-size: 1.2rem;
+        }
+
+        @media (max-width: 768px) {
+            .labs-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            h1 {
+                font-size: 2rem;
+                margin-top: 30px;
+            }
+            
+            .modal-header {
+                height: 200px;
+            }
+            
+            .modal-body {
+                padding: 20px;
+            }
+            
+            .modal-features {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <button class="theme-toggle" id="themeToggle">
+        <i class="fas fa-moon"></i>
+        <span>Dark Mode</span>
+    </button>
+
+    <div class="container">
+        <h1 data-aos="fade-down">Our Research Laboratories</h1>
+        
+        <div class="labs-intro" data-aos="fade-up">
+            Explore our state-of-the-art research facilities equipped with cutting-edge technology and staffed by world-class researchers. Our laboratories support interdisciplinary collaboration and innovation across various fields of study.
+        </div>
+        
+        <div class="labs-grid">
+            <!-- Lab 1 -->
+            <div class="lab-card" data-aos="fade-up" data-aos-delay="100">
+                <div class="lab-img-container">
+                    <img src="https://images.unsplash.com/photo-1532094349884-543bc11b234d?ixlib=rb-1.2.1&auto=format&fit=crop&w=600&q=80" alt="Chemistry Lab" class="lab-img">
+                    <div class="lab-icon">
+                        <i class="fas fa-flask"></i>
+                    </div>
+                </div>
+                <h3 class="lab-name">Advanced Chemistry Lab</h3>
+                <div class="lab-location">
+                    <i class="fas fa-map-marker-alt"></i> Science Building, Room 205
+                </div>
+                <p class="lab-bio">Our flagship chemistry laboratory features advanced spectroscopy equipment and fume hoods for organic synthesis research.</p>
+                <div class="lab-equipment">
+                    <span class="equipment-tag">HPLC</span>
+                    <span class="equipment-tag">GC-MS</span>
+                    <span class="equipment-tag">FTIR</span>
+                </div>
+                
+                <a href="#" class="lab-link" data-lab="chem">View Details</a>
+            </div>
+            
+            <!-- Lab 2 -->
+            <div class="lab-card" data-aos="fade-up" data-aos-delay="150">
+                <div class="lab-img-container">
+                    <img src="https://images.unsplash.com/photo-1575505586569-646b2ca898fc?ixlib=rb-1.2.1&auto=format&fit=crop&w=600&q=80" alt="Biology Lab" class="lab-img">
+                    <div class="lab-icon">
+                        <i class="fas fa-dna"></i>
+                    </div>
+                </div>
+                <h3 class="lab-name">Molecular Biology Lab</h3>
+                <div class="lab-location">
+                    <i class="fas fa-map-marker-alt"></i> Biotechnology Center, Room 312
+                </div>
+                <p class="lab-bio">Equipped for genetic engineering, PCR, electrophoresis, and other molecular biology techniques.</p>
+                <div class="lab-equipment">
+                    <span class="equipment-tag">Thermocycler</span>
+                    <span class="equipment-tag">Electrophoresis</span>
+                    <span class="equipment-tag">Centrifuge</span>
+                </div>
+                <a href="#" class="lab-link" data-lab="bio">View Details</a>
+            </div>
+            
+            <!-- Lab 3 -->
+            <div class="lab-card" data-aos="fade-up" data-aos-delay="200">
+                <div class="lab-img-container">
+                    <img src="https://images.unsplash.com/photo-1550751827-4bd374c3f58b?ixlib=rb-1.2.1&auto=format&fit=crop&w=600&q=80" alt="Nanotech Lab" class="lab-img">
+                    <div class="lab-icon">
+                        <i class="fas fa-microchip"></i>
+                    </div>
+                </div>
+                <h3 class="lab-name">Nanotechnology Lab</h3>
+                <div class="lab-location">
+                    <i class="fas fa-map-marker-alt"></i> Engineering Wing, Room 418
+                </div>
+                <p class="lab-bio">Clean room facility for nanomaterial synthesis and characterization with atomic precision.</p>
+                <div class="lab-equipment">
+                    <span class="equipment-tag">AFM</span>
+                    <span class="equipment-tag">SEM</span>
+                    <span class="equipment-tag">Sputter</span>
+                </div>
+                <a href="#" class="lab-link" data-lab="nano">View Details</a>
+            </div>
+            
+            <!-- Lab 4 -->
+            <div class="lab-card" data-aos="fade-up" data-aos-delay="250">
+                <div class="lab-img-container">
+                    <img src="https://images.unsplash.com/photo-1629909613654-28e377c0b8e0?ixlib=rb-1.2.1&auto=format&fit=crop&w=600&q=80" alt="Cognitive Science Lab" class="lab-img">
+                    <div class="lab-icon">
+                        <i class="fas fa-brain"></i>
+                    </div>
+                </div>
+                <h3 class="lab-name">Cognitive Science Lab</h3>
+                <div class="lab-location">
+                    <i class="fas fa-map-marker-alt"></i> Psychology Building, Room 104
+                </div>
+                <p class="lab-bio">Studies human cognition with EEG, eye-tracking, and behavioral observation systems.</p>
+                <div class="lab-equipment">
+                    <span class="equipment-tag">EEG</span>
+                    <span class="equipment-tag">Eye Tracker</span>
+                    <span class="equipment-tag">VR Setup</span>
+                </div>
+                <a href="#" class="lab-link" data-lab="cog">View Details</a>
+            </div>
+            
+            <!-- Lab 5 -->
+            <div class="lab-card" data-aos="fade-up" data-aos-delay="300">
+                <div class="lab-img-container">
+                    <img src="https://images.unsplash.com/photo-1593508512255-86ab42a8e620?ixlib=rb-1.2.1&auto=format&fit=crop&w=600&q=80" alt="Robotics Lab" class="lab-img">
+                    <div class="lab-icon">
+                        <i class="fas fa-robot"></i>
+                    </div>
+                </div>
+                <h3 class="lab-name">Robotics Lab</h3>
+                <div class="lab-location">
+                    <i class="fas fa-map-marker-alt"></i> Engineering Wing, Room 315
+                </div>
+                <p class="lab-bio">Develops autonomous systems with industrial robots, drones, and AI integration.</p>
+                <div class="lab-equipment">
+                    <span class="equipment-tag">Industrial Arms</span>
+                    <span class="equipment-tag">3D Printers</span>
+                    <span class="equipment-tag">LiDAR</span>
+                </div>
+                <a href="#" class="lab-link" data-lab="robot">View Details</a>
+            </div>
+            
+            <!-- Lab 6 -->
+            <div class="lab-card" data-aos="fade-up" data-aos-delay="350">
+                <div class="lab-img-container">
+                    <img src="https://images.unsplash.com/photo-1551288049-bebda4e38f71?ixlib=rb-1.2.1&auto=format&fit=crop&w=600&q=80" alt="Data Science Lab" class="lab-img">
+                    <div class="lab-icon">
+                        <i class="fas fa-laptop-code"></i>
+                    </div>
+                </div>
+                <h3 class="lab-name">Data Science Lab</h3>
+                <div class="lab-location">
+                    <i class="fas fa-map-marker-alt"></i> Computer Science Building, Room 210
+                </div>
+                <p class="lab-bio">High-performance computing cluster for big data analysis and machine learning research.</p>
+                <div class="lab-equipment">
+                    <span class="equipment-tag">GPU Cluster</span>
+                    <span class="equipment-tag">Hadoop</span>
+                    <span class="equipment-tag">Visualization Wall</span>
+                </div>
+                <a href="#" class="lab-link" data-lab="data">View Details</a>
+            </div>
+            
+            <!-- Lab 7 -->
+            <div class="lab-card" data-aos="fade-up" data-aos-delay="400">
+                <div class="lab-img-container">
+                    <img src="https://images.unsplash.com/photo-1508514177221-188b1cf16e9d?ixlib=rb-1.2.1&auto=format&fit=crop&w=600&q=80" alt="Energy Lab" class="lab-img">
+                    <div class="lab-icon">
+                        <i class="fas fa-solar-panel"></i>
+                    </div>
+                </div>
+                <h3 class="lab-name">Energy Research Lab</h3>
+                <div class="lab-location">
+                    <i class="fas fa-map-marker-alt"></i> Engineering Wing, Room 502
+                </div>
+                <p class="lab-bio">Tests renewable energy systems including solar, wind, and battery technologies.</p>
+                <div class="lab-equipment">
+                    <span class="equipment-tag">Solar Simulator</span>
+                    <span class="equipment-tag">Battery Tester</span>
+                    <span class="equipment-tag">Wind Tunnel</span>
+                </div>
+                <a href="#" class="lab-link" data-lab="energy">View Details</a>
+            </div>
+            
+            <!-- Lab 8 -->
+            <div class="lab-card" data-aos="fade-up" data-aos-delay="450">
+                <div class="lab-img-container">
+                    <img src="https://images.unsplash.com/photo-1575503802870-45de6a6217c8?ixlib=rb-1.2.1&auto=format&fit=crop&w=600&q=80" alt="Microscopy Lab" class="lab-img">
+                    <div class="lab-icon">
+                        <i class="fas fa-microscope"></i>
+                    </div>
+                </div>
+                <h3 class="lab-name">Advanced Microscopy</h3>
+                <div class="lab-location">
+                    <i class="fas fa-map-marker-alt"></i> Science Building, Room 301
+                </div>
+                <p class="lab-bio">High-resolution imaging facility with confocal, electron, and atomic force microscopes.</p>
+                <div class="lab-equipment">
+                    <span class="equipment-tag">Confocal</span>
+                    <span class="equipment-tag">TEM</span>
+                    <span class="equipment-tag">AFM</span>
+                </div>
+                <a href="#" class="lab-link" data-lab="micro">View Details</a>
+            </div>
+            
+            <!-- Lab 9 -->
+            <div class="lab-card" data-aos="fade-up" data-aos-delay="500">
+                <div class="lab-img-container">
+                    <img src="https://images.unsplash.com/photo-1532094349884-543bc11b234d?ixlib=rb-1.2.1&auto=format&fit=crop&w=600&q=80" alt="Quantum Lab" class="lab-img">
+                    <div class="lab-icon">
+                        <i class="fas fa-atom"></i>
+                    </div>
+                </div>
+                <h3 class="lab-name">Quantum Physics Lab</h3>
+                <div class="lab-location">
+                    <i class="fas fa-map-marker-alt"></i> Physics Building, Room 401
+                </div>
+                <p class="lab-bio">Research in quantum computing, entanglement, and fundamental physics phenomena.</p>
+                <div class="lab-equipment">
+                    <span class="equipment-tag">Optical Table</span>
+                    <span class="equipment-tag">Lasers</span>
+                    <span class="equipment-tag">Cryostat</span>
+                </div>
+                <a href="#" class="lab-link" data-lab="quantum">View Details</a>
+            </div>
+            
+            <!-- Lab 10 -->
+            <div class="lab-card" data-aos="fade-up" data-aos-delay="550">
+                <div class="lab-img-container">
+                    <img src="https://images.unsplash.com/photo-1416879595882-3373a0480b5b?ixlib=rb-1.2.1&auto=format&fit=crop&w=600&q=80" alt="Plant Science Lab" class="lab-img">
+                    <div class="lab-icon">
+                        <i class="fas fa-seedling"></i>
+                    </div>
+                </div>
+                <h3 class="lab-name">Plant Science Lab</h3>
+                <div class="lab-location">
+                    <i class="fas fa-map-marker-alt"></i> Biology Building, Room 107
+                </div>
+                <p class="lab-bio">Studies plant genetics, growth patterns, and responses to environmental factors.</p>
+                <div class="lab-equipment">
+                    <span class="equipment-tag">Growth Chambers</span>
+                    <span class="equipment-tag">PCR</span>
+                    <span class="equipment-tag">HPLC</span>
+                </div>
+                <a href="#" class="lab-link" data-lab="plant">View Details</a>
+            </div>
+            
+            <!-- Lab 11 -->
+            <div class="lab-card" data-aos="fade-up" data-aos-delay="600">
+                <div class="lab-img-container">
+                    <img src="https://images.unsplash.com/photo-1560279966-8d410fe8676a?ixlib=rb-1.2.1&auto=format&fit=crop&w=600&q=80" alt="Marine Biology Lab" class="lab-img">
+                    <div class="lab-icon">
+                        <i class="fas fa-water"></i>
+                    </div>
+                </div>
+                <h3 class="lab-name">Marine Biology Lab</h3>
+                <div class="lab-location">
+                    <i class="fas fa-map-marker-alt"></i> Coastal Research Center
+                </div>
+                <p class="lab-bio">Saltwater aquaria and equipment for studying marine organisms and ecosystems.</p>
+                <div class="lab-equipment">
+                    <span class="equipment-tag">Aquaria</span>
+                    <span class="equipment-tag">Microscopes</span>
+                    <span class="equipment-tag">Water Analysis</span>
+                </div>
+                <a href="#" class="lab-link" data-lab="marine">View Details</a>
+            </div>
+            
+            <!-- Lab 12 -->
+            <div class="lab-card" data-aos="fade-up" data-aos-delay="650">
+                <div class="lab-img-container">
+                    <img src="https://images.unsplash.com/photo-1581094271901-8022df4466f9?ixlib=rb-1.2.1&auto=format&fit=crop&w=600&q=80" alt="Biochemistry Lab" class="lab-img">
+                    <div class="lab-icon">
+                        <i class="fas fa-vial"></i>
+                    </div>
+                </div>
+                <h3 class="lab-name">Biochemistry Lab</h3>
+                <div class="lab-location">
+                    <i class="fas fa-map-marker-alt"></i> Science Building, Room 208
+                </div>
+                <p class="lab-bio">Protein purification, enzyme kinetics, and metabolic pathway analysis.</p>
+                <div class="lab-equipment">
+                    <span class="equipment-tag">Spectrophotometer</span>
+                    <span class="equipment-tag">Centrifuge</span>
+                    <span class="equipment-tag">Chromatography</span>
+                </div>
+                <a href="#" class="lab-link" data-lab="biochem">View Details</a>
+            </div>
+            
+            <!-- Lab 13 -->
+            <div class="lab-card" data-aos="fade-up" data-aos-delay="700">
+                <div class="lab-img-container">
+                    <img src="https://images.unsplash.com/photo-1462331940025-496dfbfc7564?ixlib=rb-1.2.1&auto=format&fit=crop&w=600&q=80" alt="Astrophysics Lab" class="lab-img">
+                    <div class="lab-icon">
+                        <i class="fas fa-satellite-dish"></i>
+                    </div>
+                </div>
+                <h3 class="lab-name">Astrophysics Lab</h3>
+                <div class="lab-location">
+                    <i class="fas fa-map-marker-alt"></i> Physics Building, Room 505
+                </div>
+                <p class="lab-bio">Analyzes astronomical data and simulates cosmic phenomena.</p>
+                <div class="lab-equipment">
+                    <span class="equipment-tag">Radio Telescope</span>
+                    <span class="equipment-tag">Spectrograph</span>
+                    <span class="equipment-tag">Supercomputer</span>
+                </div>
+                <a href="#" class="lab-link" data-lab="astro">View Details</a>
+            </div>
+            
+            <!-- Lab 14 -->
+            <div class="lab-card" data-aos="fade-up" data-aos-delay="750">
+                <div class="lab-img-container">
+                    <img src="https://images.unsplash.com/photo-1581093057305-25f4a9c3e228?ixlib=rb-1.2.1&auto=format&fit=crop&w=600&q=80" alt="Biosafety Lab" class="lab-img">
+                    <div class="lab-icon">
+                        <i class="fas fa-biohazard"></i>
+                    </div>
+                </div>
+                <h3 class="lab-name">Biosafety Level 2 Lab</h3>
+                <div class="lab-location">
+                    <i class="fas fa-map-marker-alt"></i> Medical Research Building
+                </div>
+                <p class="lab-bio">Secure facility for working with pathogenic microorganisms and cell cultures.</p>
+                <div class="lab-equipment">
+                    <span class="equipment-tag">Biosafety Cabinets</span>
+                    <span class="equipment-tag">Autoclave</span>
+                    <span class="equipment-tag">Incubators</span>
+                </div>
+                <a href="#" class="lab-link" data-lab="biosafety">View Details</a>
+            </div>
+            
+            <!-- Lab 15 -->
+            <div class="lab-card" data-aos="fade-up" data-aos-delay="800">
+                <div class="lab-img-container">
+                    <img src="https://images.unsplash.com/photo-1558494949-ef010cbdcc31?ixlib=rb-1.2.1&auto=format&fit=crop&w=600&q=80" alt="Networking Lab" class="lab-img">
+                    <div class="lab-icon">
+                        <i class="fas fa-network-wired"></i>
+                    </div>
+                </div>
+                <h3 class="lab-name">Networking Lab</h3>
+                <div class="lab-location">
+                    <i class="fas fa-map-marker-alt"></i> Computer Science Building, Room 305
+                </div>
+                <p class="lab-bio">Research in cybersecurity, network protocols, and distributed systems.</p>
+                <div class="lab-equipment">
+                    <span class="equipment-tag">Network Simulators</span>
+                    <span class="equipment-tag">Server Racks</span>
+                    <span class="equipment-tag">IoT Devices</span>
+                </div>
+                <a href="#" class="lab-link" data-lab="network">View Details</a>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Modal Popup -->
+    <div class="modal" id="labModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <img src="" alt="Lab Image" class="modal-header-img" id="modalHeaderImg">
+                <div class="modal-icon" id="modalIcon"></div>
+                <button class="modal-close" id="modalClose">&times;</button>
+            </div>
+            <div class="modal-body">
+                <h2 class="modal-title" id="modalTitle">Lab Name</h2>
+                <div class="modal-subtitle" id="modalSubtitle">
+                    <i class="fas fa-map-marker-alt"></i> Location
+                </div>
+                
+                <div class="modal-section">
+                    <h3 class="modal-section-title">About This Lab</h3>
+                    <p class="modal-description" id="modalDescription">
+                        Detailed description of the laboratory and its research focus.
+                    </p>
+                </div>
+                
+                <div class="modal-section">
+                    <h3 class="modal-section-title">Key Features</h3>
+                    <div class="modal-features" id="modalFeatures">
+                        <!-- Features will be added by JavaScript -->
+                    </div>
+                </div>
+                
+                <div class="modal-section">
+                    <h3 class="modal-section-title">Equipment</h3>
+                    <div class="lab-equipment" id="modalEquipment">
+                        <!-- Equipment tags will be added by JavaScript -->
+                    </div>
+                </div>
+                
+                <div class="modal-section">
+                    <h3 class="modal-section-title">Gallery</h3>
+                    <div class="modal-gallery" id="modalGallery">
+                        <!-- Gallery images will be added by JavaScript -->
+                    </div>
+                </div>
+                
+                <div class="modal-contact">
+                    <h3 class="modal-section-title">Contact Information</h3>
+                    <p>For more information about this lab, please contact:</p>
+                    <p><strong>Lab Director:</strong> <span id="labDirector">Dr. Jane Smith</span></p>
+                    <p><strong>Email:</strong> <span id="labEmail">lab@university.edu</span></p>
+                    <p><strong>Phone:</strong> <span id="labPhone">(123) 456-7890</span></p>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Font Awesome for icons -->
+    <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
+    <!-- AOS JS -->
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    <script>
+        // Initialize AOS
+        AOS.init({
+            duration: 800,
+            once: true
+        });
+
+        // Dark mode toggle
+        const themeToggle = document.getElementById('themeToggle');
+        const icon = themeToggle.querySelector('i');
+        const text = themeToggle.querySelector('span');
+        
+        // Check for saved theme preference
+        const currentTheme = localStorage.getItem('theme');
+        if (currentTheme) {
+            document.documentElement.setAttribute('data-theme', currentTheme);
+            
+            if (currentTheme === 'dark') {
+                icon.classList.remove('fa-moon');
+                icon.classList.add('fa-sun');
+                text.textContent = 'Light Mode';
+            }
+        }
+        
+        themeToggle.addEventListener('click', () => {
+            let theme = 'light';
+            if (document.documentElement.getAttribute('data-theme') !== 'dark') {
+                theme = 'dark';
+                icon.classList.remove('fa-moon');
+                icon.classList.add('fa-sun');
+                text.textContent = 'Light Mode';
+            } else {
+                icon.classList.remove('fa-sun');
+                icon.classList.add('fa-moon');
+                text.textContent = 'Dark Mode';
+            }
+            document.documentElement.setAttribute('data-theme', theme);
+            localStorage.setItem('theme', theme);
+        });
+
+        // Modal functionality
+        const modal = document.getElementById('labModal');
+        const modalClose = document.getElementById('modalClose');
+        const modalTitle = document.getElementById('modalTitle');
+        const modalSubtitle = document.getElementById('modalSubtitle');
+        const modalDescription = document.getElementById('modalDescription');
+        const modalHeaderImg = document.getElementById('modalHeaderImg');
+        const modalIcon = document.getElementById('modalIcon');
+        const modalFeatures = document.getElementById('modalFeatures');
+        const modalEquipment = document.getElementById('modalEquipment');
+        const modalGallery = document.getElementById('modalGallery');
+        const labDirector = document.getElementById('labDirector');
+        const labEmail = document.getElementById('labEmail');
+        const labPhone = document.getElementById('labPhone');
+
+        // Lab data - in a real app this would come from a database
+        const labs = {
+            chem: {
+                name: "Advanced Chemistry Lab",
+                location: "Science Building, Room 205",
+                description: "Our flagship chemistry laboratory spans 2,500 square feet and features advanced spectroscopy equipment, 20 fume hoods for organic synthesis research, and a dedicated mass spectrometry suite. The lab supports research in materials chemistry, catalysis, and environmental chemistry. Recent projects include developing novel polymer composites and studying atmospheric chemical reactions.",
+                features: [
+                    {
+                        title: "Research Areas",
+                        desc: "Organic synthesis, materials chemistry, environmental chemistry"
+                    },
+                    {
+                        title: "Capacity",
+                        desc: "20 researchers simultaneously"
+                    },
+                    {
+                        title: "Special Equipment",
+                        desc: "400MHz NMR, FTIR, GC-MS, HPLC"
+                    },
+                    {
+                        title: "Safety Features",
+                        desc: "Emergency showers, fume hoods, chemical storage"
+                    }
+                ],
+                equipment: ["HPLC", "GC-MS", "FTIR", "NMR", "UV-Vis"],
+                gallery: [
+                    "https://images.unsplash.com/photo-1532094349884-543bc11b234d?ixlib=rb-1.2.1&auto=format&fit=crop&w=600&q=80",
+                    "https://images.unsplash.com/photo-1581093057927-02a7500f3cd5?ixlib=rb-1.2.1&auto=format&fit=crop&w=600&q=80",
+                    "https://images.unsplash.com/photo-1581094271901-8022df4466f9?ixlib=rb-1.2.1&auto=format&fit=crop&w=600&q=80"
+                ],
+                director: "Dr. Sarah Johnson",
+                email: "chem.lab@university.edu",
+                phone: "(123) 456-7891",
+                icon: "flask"
+            },
+            bio: {
+                name: "Molecular Biology Lab",
+                location: "Biotechnology Center, Room 312",
+                description: "This 1,800 square foot molecular biology facility is equipped for genetic engineering, PCR, electrophoresis, and other cutting-edge techniques. The lab features dedicated areas for DNA/RNA work, protein analysis, and cell culture (BSL-2). Current research includes CRISPR gene editing, cancer biology, and microbial genomics.",
+                features: [
+                    {
+                        title: "Research Areas",
+                        desc: "Genetic engineering, cancer biology, microbial genomics"
+                    },
+                    {
+                        title: "Special Equipment",
+                        desc: "Real-time PCR, gel doc system, cell culture hoods"
+                    },
+                    {
+                        title: "Safety Level",
+                        desc: "BSL-2 certified for cell culture work"
+                    },
+                    {
+                        title: "Collaborations",
+                        desc: "Works with medical school and biotech companies"
+                    }
+                ],
+                equipment: ["Thermocycler", "Electrophoresis", "Centrifuge", "Microscopes", "Incubators"],
+                gallery: [
+                    "https://images.unsplash.com/photo-1575505586569-646b2ca898fc?ixlib=rb-1.2.1&auto=format&fit=crop&w=600&q=80",
+                    "https://images.unsplash.com/photo-1581094271901-8022df4466f9?ixlib=rb-1.2.1&auto=format&fit=crop&w=600&q=80",
+                    "https://images.unsplash.com/photo-1581093057305-25f4a9c3e228?ixlib=rb-1.2.1&auto=format&fit=crop&w=600&q=80"
+                ],
+                director: "Dr. Michael Chen",
+                email: "molbio.lab@university.edu",
+                phone: "(123) 456-7892",
+                icon: "dna"
+            },
+            // Add data for other labs similarly...
+            nano: {
+                name: "Nanotechnology Lab",
+                location: "Engineering Wing, Room 418",
+                description: "Our 3,000 square foot clean room facility (Class 1000) enables nanomaterial synthesis and characterization with atomic precision. The lab specializes in quantum dots, nanowires, and 2D materials for applications in electronics, energy, and medicine. Features include electron beam lithography and atomic layer deposition systems.",
+                features: [
+                    {
+                        title: "Clean Room",
+                        desc: "Class 1000 with lithography capabilities"
+                    },
+                    {
+                        title: "Characterization",
+                        desc: "AFM, SEM, TEM, XPS surface analysis"
+                    },
+                    {
+                        title: "Applications",
+                        desc: "Electronics, energy storage, medical devices"
+                    }
+                ],
+                equipment: ["AFM", "SEM", "Sputter", "ALD", "E-beam Lithography"],
+                gallery: [
+                    "https://images.unsplash.com/photo-1550751827-4bd374c3f58b?ixlib=rb-1.2.1&auto=format&fit=crop&w=600&q=80",
+                    "https://images.unsplash.com/photo-1581093057927-02a7500f3cd5?ixlib=rb-1.2.1&auto=format&fit=crop&w=600&q=80",
+                    "https://images.unsplash.com/photo-1581094271901-8022df4466f9?ixlib=rb-1.2.1&auto=format&fit=crop&w=600&q=80"
+                ],
+                director: "Dr. Jennifer Lee",
+                email: "nano.lab@university.edu",
+                phone: "(123) 456-7893",
+                icon: "microchip"
+            }
+            // Continue with data for all 15 labs...
+        };
+
+        // Add click handlers to all lab links
+        document.querySelectorAll('.lab-link').forEach(link => {
+            link.addEventListener('click', function(e) {
+                e.preventDefault();
+                const labId = this.getAttribute('data-lab');
+                const lab = labs[labId];
+                
+                // Set modal content
+                modalTitle.textContent = lab.name;
+                modalSubtitle.innerHTML = `<i class="fas fa-map-marker-alt"></i> ${lab.location}`;
+                modalDescription.textContent = lab.description;
+                modalHeaderImg.src = document.querySelector(`.lab-link[data-lab="${labId}"]`).closest('.lab-card').querySelector('.lab-img').src;
+                
+                // Set icon
+                modalIcon.innerHTML = `<i class="fas fa-${lab.icon}"></i>`;
+                
+                // Set features
+                modalFeatures.innerHTML = '';
+                lab.features.forEach(feature => {
+                    modalFeatures.innerHTML += `
+                        <div class="feature-item">
+                            <div class="feature-title">${feature.title}</div>
+                            <div class="feature-desc">${feature.desc}</div>
+                        </div>
+                    `;
+                });
+                
+                // Set equipment
+                modalEquipment.innerHTML = '';
+                lab.equipment.forEach(item => {
+                    modalEquipment.innerHTML += `<span class="equipment-tag">${item}</span>`;
+                });
+                
+                // Set gallery
+                modalGallery.innerHTML = '';
+                lab.gallery.forEach(img => {
+                    modalGallery.innerHTML += `
+                        <div class="gallery-item">
+                            <img src="${img}" alt="${lab.name}" class="gallery-img">
+                        </div>
+                    `;
+                });
+                
+                // Set contact info
+                labDirector.textContent = lab.director;
+                labEmail.textContent = lab.email;
+                labPhone.textContent = lab.phone;
+                
+                // Show modal
+                modal.style.display = 'block';
+                document.body.style.overflow = 'hidden';
+            });
+        });
+
+        // Close modal
+        modalClose.addEventListener('click', () => {
+            modal.style.display = 'none';
+            document.body.style.overflow = 'auto';
+        });
+
+        // Close when clicking outside modal
+        window.addEventListener('click', (e) => {
+            if (e.target === modal) {
+                modal.style.display = 'none';
+                document.body.style.overflow = 'auto';
+            }
+        });
+    </script>
+</body>
+</html>
